@@ -11,7 +11,10 @@ import java.nio.file.Paths;
 public class DefaultStaticResourcesProcessor implements RequestProcessor {
     @Override
     public void execute(HttpRequest httpRequest, OutputStream output) throws IOException {
-        String filename = httpRequest.getUri().substring(1);
+        if (httpRequest.uri().length() < 2) {
+            return;
+        }
+        String filename = httpRequest.uri().substring(1);
         Path filePath = Paths.get("static/", filename);
         String fileType = filename.substring(filename.lastIndexOf(".") + 1);
         byte[] fileData = Files.readAllBytes(filePath);

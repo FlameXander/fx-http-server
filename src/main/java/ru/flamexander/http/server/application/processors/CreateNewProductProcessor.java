@@ -13,9 +13,8 @@ import java.nio.charset.StandardCharsets;
 public class CreateNewProductProcessor implements RequestProcessor {
     @Override
     public void execute(HttpRequest httpRequest, OutputStream output) throws IOException {
-        httpRequest.log();
         Gson gson = new Gson();
-        Item item = gson.fromJson(httpRequest.getBody(), Item.class);
+        Item item = gson.fromJson(httpRequest.body(), Item.class);
         Storage.save(item);
         String jsonOutItem = gson.toJson(item);
 

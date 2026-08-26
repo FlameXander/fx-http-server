@@ -91,7 +91,6 @@ public class ByteBuffer {
         try {
             while (true) {
                 int n = in.read(data);
-                System.out.println(n);
                 if (n <= 0) {
                     break;
                 }

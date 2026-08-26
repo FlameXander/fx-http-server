@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class Parser {
     private ThreadLocal<ByteBuffer> buffer;
-    private int bufferSize;
 
     private static final byte SPACE = (byte) ' ';
     private static final byte QUESTION = (byte) '?';
@@ -18,20 +17,21 @@ public class Parser {
     private static final byte COLON = (byte) ':';
 
     public Parser(int bufferSize) {
-        this.bufferSize = bufferSize;
         this.buffer = ThreadLocal.withInitial(() -> new ByteBuffer(bufferSize));
     }
 
-    //    POST /demo?a=1&b=2 HTTP/1.1
-    //    User-Agent: PostmanRuntime/7.37.3
-    //    Accept: */*
-    //Host: localhost:8189
-    //Accept-Encoding: gzip, deflate, br
-    //Connection: keep-alive
-    //Content-Type: application/x-www-form-urlencoded
-    //Content-Length: 29
-    //
-    //email=a%40gmail.com&phone=111
+    // Request Example:
+    // ========================================================
+    // POST /demo?a=1&b=2 HTTP/1.1[CR][LF]
+    // User-Agent: PostmanRuntime/7.37.3[CR][LF]
+    // Accept: */*[CR][LF]
+    // Host: localhost:8189[CR][LF]
+    // Accept-Encoding: gzip, deflate, br[CR][LF]
+    // Connection: keep-alive[CR][LF]
+    // Content-Type: application/x-www-form-urlencoded[CR][LF]
+    // Content-Length: 29[CR][LF]
+    // [CR][LF]
+    // email=a%40gmail.com&phone=111
 
     public HttpRequest parse(InputStream in) throws IOException {
         ByteBuffer buf = buffer.get();
@@ -43,7 +43,6 @@ public class Parser {
         HttpMethod method = HttpMethod.valueOf(s);
         String uri = buf.readUntilOr(SPACE, QUESTION);
         Map<String, String> parameters = null;
-        // /demo?abc=10&b=20&c=30 HTTP/1.1
         if (buf.getLeftValue() == QUESTION) {
             parameters = new HashMap<>();
             do {
@@ -53,7 +52,6 @@ public class Parser {
             } while (buf.getLeftValue() != SPACE);
         }
         buf.skipRestOfLine();
-        // Content-Type: text/htmlCRLF
         Map<String, String> headers = new HashMap<>();
         while (true) {
             String key = buf.readUntilAnd(COLON, SPACE);

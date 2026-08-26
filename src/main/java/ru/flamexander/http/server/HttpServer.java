@@ -43,8 +43,9 @@ public class HttpServer {
     }
 
     private void executeRequest(Socket socket) {
-        try {
+        try (socket) {
             HttpRequest request = parser.parse(socket.getInputStream());
+            logger.debug("Получен запрос {} {} {} {} {}", request.method(), request.uri(), request.parameters(), request.headers(), request.body());
             if (request == null) {
                 return;
             }
@@ -52,14 +53,6 @@ public class HttpServer {
             socket.getOutputStream().flush();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (socket != null) {
-                    socket.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

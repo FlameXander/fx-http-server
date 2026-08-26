@@ -38,11 +38,11 @@ public class Dispatcher {
     }
 
     public void execute(HttpRequest httpRequest, OutputStream outputStream) throws IOException {
-        if (httpRequest.getMethod() == HttpMethod.OPTIONS) {
+        if (httpRequest.method() == HttpMethod.OPTIONS) {
             optionsRequestProcessor.execute(httpRequest, outputStream);
             return;
         }
-        if (Files.exists(Paths.get("static/", httpRequest.getUri().substring(1)))) {
+        if (httpRequest.uri().length() > 1 && Files.exists(Paths.get("static/", httpRequest.uri().substring(1)))) {
             staticResourcesProcessor.execute(httpRequest, outputStream);
             return;
         }
