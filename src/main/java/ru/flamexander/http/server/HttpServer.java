@@ -13,25 +13,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HttpServer {
-    private int port;
+    private HttpServerConfig config;
     private Dispatcher dispatcher;
     private Parser parser;
     private ExecutorService executorService;
 
     private static final Logger logger = LoggerFactory.getLogger(HttpServer.class.getName());
 
-    private static final int DEFAULT_BUFFER_SIZE = 32576;
-
-    public HttpServer(int port) {
-        this.port = port;
+    public HttpServer() {
+        this.config = HttpServerConfig.load();
     }
 
     public void start() {
-        executorService = Executors.newFixedThreadPool(4);
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            logger.info("Сервер запущен на порту: {}", port);
+        executorService = Executors.newFixedThreadPool(config.getThreadPoolSize());
+        try (ServerSocket serverSocket = new ServerSocket(config.getPort())) {
+            logger.info("Сервер запущен на порту: {}", config.getPort());
             this.dispatcher = new Dispatcher();
-            this.parser = new Parser();
+            this.parser = new Parser(config.getBufferSize());
             Storage.init();
             while (true) {
                 Socket socket = serverSocket.accept();

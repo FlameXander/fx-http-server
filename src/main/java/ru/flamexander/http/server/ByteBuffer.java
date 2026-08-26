@@ -13,8 +13,8 @@ public class ByteBuffer {
     private static final byte CR = (byte)'\r';
     private static final byte LF = (byte)'\n';
 
-    public ByteBuffer() {
-        this.data = new byte[8192];
+    public ByteBuffer(int size) {
+        this.data = new byte[size];
     }
 
     public void init(InputStream in) {

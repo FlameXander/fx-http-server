@@ -1,0 +1,9 @@
+server:
+  port: 8189
+
+threadPool:
+  size: 4
+
+parser:
+  buffer:
+    size: 8192

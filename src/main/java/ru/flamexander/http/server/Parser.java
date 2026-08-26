@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Parser {
     private ThreadLocal<ByteBuffer> buffer;
+    private int bufferSize;
 
     private static final byte SPACE = (byte) ' ';
     private static final byte QUESTION = (byte) '?';
@@ -16,8 +17,9 @@ public class Parser {
     private static final byte EQ = (byte) '=';
     private static final byte COLON = (byte) ':';
 
-    public Parser() {
-        buffer = ThreadLocal.withInitial(() -> new ByteBuffer());
+    public Parser(int bufferSize) {
+        this.bufferSize = bufferSize;
+        this.buffer = ThreadLocal.withInitial(() -> new ByteBuffer(bufferSize));
     }
 
     //    POST /demo?a=1&b=2 HTTP/1.1
