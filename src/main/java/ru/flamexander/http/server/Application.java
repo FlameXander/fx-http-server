@@ -1,7 +1,7 @@
 package ru.flamexander.http.server;
 
 public class Application {
-    public static void main(String[] args) {
+    static void main() {
         new HttpServer().start();
     }
 }

@@ -25,11 +25,11 @@ public class HttpServer {
     }
 
     public void start() {
-        executorService = Executors.newFixedThreadPool(config.getThreadPoolSize());
-        try (ServerSocket serverSocket = new ServerSocket(config.getPort())) {
-            logger.info("Сервер запущен на порту: {}", config.getPort());
+        executorService = Executors.newFixedThreadPool(config.threadPool().size());
+        try (ServerSocket serverSocket = new ServerSocket(config.server().port())) {
+            logger.info("Сервер запущен на порту: {}", config.server().port());
             this.dispatcher = new Dispatcher();
-            this.parser = new Parser(config.getBufferSize());
+            this.parser = new Parser(config.parser().buffer().size());
             Storage.init();
             while (true) {
                 Socket socket = serverSocket.accept();

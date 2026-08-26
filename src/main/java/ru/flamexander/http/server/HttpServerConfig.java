@@ -9,93 +9,21 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class HttpServerConfig {
-    static class Server {
-        private int port;
-
-        public int getPort() {
-            return port;
-        }
-
-        public void setPort(int port) {
-            this.port = port;
-        }
+record HttpServerConfig(
+        Server server,
+        ThreadPool threadPool,
+        Parser parser
+) {
+    record Server(int port) {
     }
 
-    static class ThreadPool {
-        private int size;
-
-        public int getSize() {
-            return size;
-        }
-
-        public void setSize(int size) {
-            this.size = size;
-        }
+    record ThreadPool(int size) {
     }
 
-    static class Parser {
-        private Buffer buffer;
-
-        public Buffer getBuffer() {
-            return buffer;
-        }
-
-        public void setBuffer(Buffer buffer) {
-            this.buffer = buffer;
-        }
+    record Parser(Buffer buffer) {
     }
 
-    static class Buffer {
-        private int size;
-
-        public int getSize() {
-            return size;
-        }
-
-        public void setSize(int size) {
-            this.size = size;
-        }
-    }
-
-    public Server getServer() {
-        return server;
-    }
-
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
-    public ThreadPool getThreadPool() {
-        return threadPool;
-    }
-
-    public void setThreadPool(ThreadPool threadPool) {
-        this.threadPool = threadPool;
-    }
-
-    public Parser getParser() {
-        return parser;
-    }
-
-    public void setParser(Parser parser) {
-        this.parser = parser;
-    }
-
-    private Server server;
-    private ThreadPool threadPool;
-    private Parser parser;
-
-    public int getPort() {
-        return server.port;
-    }
-
-    public int getThreadPoolSize() {
-        return threadPool.size;
-    }
-
-    public int getBufferSize() {
-        return parser.buffer.size;
+    record Buffer(int size) {
     }
 
     public static HttpServerConfig load() {
